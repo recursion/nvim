@@ -19,15 +19,16 @@ Plugin 'rust-lang/rust.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'htacg/tidy-html5'
-
-" Colorschemes
-Plugin 'sickill/vim-monokai'
-Plugin 'gosukiwi/vim-atom-dark'
+Plugin 'jelera/vim-javascript-syntax'
 Plugin 'altercation/vim-colors-solarized'
 
 call vundle#end()
 
 "############################################
+
+" theme/colors
+set background=dark
+colorscheme pablo
 
 " Syntax highlighting
 syntax enable
@@ -39,10 +40,43 @@ filetype indent on
 " Set to auto read when a file is changed from the outside
 set autoread
 
-" setup statusline for syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" Status line
+set laststatus=2
+set ruler
+
+set statusline=   " clear the statusline for when vimrc is reloaded
+
+set statusline+=%#warningmsg#                " syntastic warning
+set statusline+=%{SyntasticStatuslineFlag()} " syntastic status
+set statusline+=%*                           " highlight
+
+set statusline+=B%n>\                        " buffer number
+set statusline+=\                            " space
+set statusline+=%-5.(%l,%c%V%)\ %<%-3P       " line/column info
+
+set statusline+=\                            " space
+set statusline+=\ \|                         " seperator
+set statusline+=\                            " space
+
+set statusline+=\ %-5f\                      " file name
+
+set statusline+=\                            " space
+set statusline+=\ \|                         " seperator
+set statusline+=\                            " space
+set statusline+=%*                           " highlight
+set statusline+=%-5{fugitive#statusline()}   " fugitive status
+set statusline+=%*                           " highlight
+"set statusline+=\ Char:\ %b,0x%-6B\         " current char
+
+set statusline+=\                            " space
+set statusline+=\ \|                         " seperator
+set statusline+=\                            " space
+
+set statusline+=%=                           " right align
+set statusline+=%h%m%r%w                     " flags
+set statusline+=[%{strlen(&ft)?&ft:'none'},  " filetype
+set statusline+=%{strlen(&fenc)?&fenc:&enc}, " encoding
+set statusline+=%{&fileformat}]              " file format
 
 " setup syntastic
 let g:syntastic_always_populate_loc_list = 1
@@ -52,14 +86,6 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_loc_list_height=5
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_html_tidy_exec = 'tidy5'
-" colorscheme (works in both gvim and vim)
-" only set if exists
-silent! colorscheme atom-dark-256
-"set background=dark
-"colorscheme solarized
-
-" Status line
-set laststatus=2
 
 " when moving between searches, center the selected line
 nnoremap n nzz
@@ -79,13 +105,14 @@ set number
 " "Scrolling"
 "set scrolloff=5
 
-" Do tabbing correctly
-set expandtab
+" show existing tab with 2 spaces
 set tabstop=2
+
+" when indenting with '>', use 2 spaces width
 set shiftwidth=2
-set softtabstop=2
-set autoindent
-set smartindent
+
+" On pressing tab, insert 2 spaces
+set expandtab
 
 " Turn visual bell on
 set vb
@@ -93,14 +120,9 @@ set vb
 " Show me what I'm doing
 set showcmd
 
-" Highlight search results
-"set hlsearch
-
 set clipboard=unnamed
 
 autocmd FileType javascript,rust,c,cpp,html,ruby,python,coffeescript autocmd BufWritePre <buffer> StripWhitespace
-
-nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
 
 " Custom keymappings
 map <C-t> :NERDTreeToggle<CR>
