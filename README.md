@@ -11,6 +11,7 @@ Install nvim....
 `git clone....`
 
 > Assuming the repo is downloaded as/to `.nvim`
+
 > Create a symbolic link from your home directory to the .nvimrc
 
 `cd ~`
